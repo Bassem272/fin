@@ -11,6 +11,22 @@ use App\Models\Cart;
 class Product extends Model
 {
     use HasFactory;
+
+        /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'title',
+        'description',
+        'price',
+        'category_id',
+        'image',
+        'status',
+        'stock',
+
+    ];
     public function orderItem(){
         return $this->hasMany(OrderItem::class);
     }

@@ -15,11 +15,13 @@ class CustomerMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user() && $request->user()->role == 'customer'){
+         $authUser = $request->user();
+
+        if($request->user() && $request->header('role') == $authUser->role){
             return $next($request) ;
         }
        else{
-        return Response()->json(['message'=> 'not authorizeder'],403);
+        return Response()->json(['message'=> 'not authorized only customer are allowed'],403);
        }
     }
 }

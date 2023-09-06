@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 class UserController extends Controller
 {
     /**
@@ -12,32 +15,31 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = user::all($columns = ['*']);
-        return response()->json(['message'=>'nottnt'], 201, ['Content-Type' => 'application/json;charset=UTF-8',], JSON_PRETTY_PRINT);
-
-
+        $users =User::all();
+        return response()->json(['message'=>'all users are here','users'=>$users],
+        201, ['Content-Type' => 'application/json;charset=UTF-8',], );
 
     }
 
     // find one item
-    public function showOne($id){
-        $user = user::find($id);
+    // public function showOne($id){
+    //     $user = user::find($id);
 
-        return response($user, 200, ['Content-Type => application/json;charset=UTF-8',], JSON_PRETTY_PRINT);
-    }
+    //     return response($user, 200, ['Content-Type => application/json;charset=UTF-8',], );
+    // }
     /**
      * Show the form for creating a new resource.
      */
     public function create(request $request)
     {
     }
-    public function getCsrfToken()
-    {
-        $token = csrf_token(); // Generate the CSRF token
-        Log::info('CSRF token: ' . $token);
+    // public function getCsrfToken()
+    // {
+    //     $token = csrf_token(); // Generate the CSRF token
+    //     Log::info('CSRF token: ' . $token);
 
-        return response()->json(['csrf_token' => $token],201);
-    }
+    //     return response()->json(['csrf_token' => $token],201);
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -48,10 +50,16 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|string|email',
 'password'=>'integer|required|min:6|max:12',
+'role'=>'required|string|in:admin,customer'
 
         ]);
-        $user = User::create($data);
-        return response()->json(201);
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'],
+        ]);
+        return response()->json(['message'=>'user created successfully','user'=>$user],201);
         //
     }
 
@@ -61,7 +69,7 @@ class UserController extends Controller
     public function show(user $user)
     {
         // DISplay the specific resource
-        return response()->json($user, 200, ['Content-Type' => 'application/json;charset=UTF-8',], JSON_PRETTY_PRINT);
+        return response()->json($user, 200, ['Content-Type' => 'application/json;charset=UTF-8',], );
     }
 
     /**
@@ -84,7 +92,7 @@ class UserController extends Controller
 'password'=>'integer|required|min:6|max:12',
         ]);
         $user->update($data);
-        return response()->json($user, 200, ['Content-Type' => 'application/json;charset=UTF-8',], JSON_PRETTY_PRINT);
+        return response()->json(['message'=>'user updated success','users'=>$user], 200, ['Content-Type' => 'application/json;charset=UTF-8',], );
     }
 
     /**
@@ -94,7 +102,13 @@ class UserController extends Controller
     {
         // delete specified user
         $user->delete();
-        return response()->json(['message' => 'item deleted success'], 204, ['Content-Type' => 'application/json;charset=UTF-8',], JSON_PRETTY_PRINT);
+        return response()->json(['message' => 'item deleted success'], 204, ['Content-Type' => 'application/json;charset=UTF-8',], );
+    }
+
+    // we will upgrade the customer to admin
+    public function upgrade(user $user){
+        $user->update(['role'=>'admin']);
+        return response()->json(['message'=>'user upgraded success','users'=>  $user], 200, ['Content-Type' => 'application/json;charset=UTF-8',], );
     }
 }
 

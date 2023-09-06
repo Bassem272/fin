@@ -6,6 +6,13 @@ use App\Http\Controllers\ArtController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderItemController;
+use App\Models\User;
+
 // use App\Http\Controllers\EmailVerificationController;
 /*
 |--------------------------------------------------------------------------
@@ -60,12 +67,19 @@ Route::get('/verify-email/{code}', [AuthController::class, 'verifyEmail']);
 Route::get('/send-mail',  [AuthController::class, 'sendTestMail']);
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::apiResource('category', CategoryController::class);
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('categories', CategoryController::class);
     Route::apiResource('products', ProductController::class);
-    // Route::apiResource('product_image', ProductImageController::class);
-    // Route::apiResource('product_type', ProductTypeController::class);
-    // Route::apiResource('art', ArtController::class);
-    // Route::apiResource('art_image', ArtImageController::class);
-    // Route::apiResource('art_type', ArtTypeController::class);
-    // Route::apiResource('art_category', ArtCategoryController::class);
+    Route::apiResource('orderItems', ProductImageController::class);
+    Route::apiResource('orders', ProductTypeController::class);
+    Route::apiResource('cart', ArtImageController::class);
+   
+
 });
+
+Route::middleware(['auth:sanctum', 'customer'])->group(function () {
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('products', ProductController::class);
+    Route::apiResource('orderItems', ProductImageController::class);
+    Route::apiResource('orders', ProductTypeController::class);
+    });
