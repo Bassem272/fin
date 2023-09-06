@@ -18,7 +18,18 @@ return new class extends Migration
             $table->dateTime('order_date');
             $table->string('order_status');
             $table->timestamps();
+            $table->string('customer_name');
+            $table->string('customer_phone',30)->nullable();
+            $table->string('customer_email')->unique();
+            $table->string('customer_address')->nullable();
+            $table->integer('total');
+            $table->json('order_items');
 
+
+            $table->foreign('customer_email')->references('email')->on('customers')->onDelete('cascade');
+             $table->foreign('customer_name')->references('name')->on('customers')->onDelete('cascade');
+            $table->foreign('customer_phone')->references('phone')->on('customers')->onDelete('cascade');
+            $table->foreign('customer_address')->references('address')->on('customers')->onDelete('cascade');
             $table->foreign('customer_id')->references('id')->on('users');
         });
     }

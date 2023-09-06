@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource.$order_items' => ['required', 'order_items_rule'],
      */
     public function index()
     {

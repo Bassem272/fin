@@ -20,7 +20,8 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        //$order_items' => ['required', 'order_items_rule'],
+
     }
 
     /**
