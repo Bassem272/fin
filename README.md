@@ -1,1 +1,1 @@
-# the backend and the frontend are in differnt branches 
+# the backend and the frontend are in different branches 
